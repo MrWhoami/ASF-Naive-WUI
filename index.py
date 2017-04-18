@@ -16,14 +16,25 @@ class Index:
     def __init__(self):
         pass
 
-    def GET(self):
-        i = web.input()
+    def generateWebpage(self):
         try:
             CmdAPI.refreshInfo()
-            render.index(CmdAPI.asf_status['Bots'])
+            return render.index(CmdAPI.asf_status['Bots'])
         except CmdAPI.ASFAPIError e:
-            render.index({}, errorName=e.kind, errorInfo=e.detail)
-        return render.index()
+            return render.index({}, errorName=e.kind, errorInfo=e.detail)
+
+    def POST(self):
+        i = web.input(op=None, bot=None)
+        try:
+            if op and bot:
+                if op == 'pause':
+                    CmdAPI.resumeBot(bot)
+                elif op == 'start':
+                    CmdAPI.pauseBot(bot)
+            CmdAPI.refreshInfo()
+            return render.index(CmdAPI.asf_status['Bots'])
+        except CmdAPI.ASFAPIError e:
+            return render.index({}, errorName=e.kind, errorInfo=e.detail)
 
 if __name__ == "__main__":
     app = web.application(urls, globals())
