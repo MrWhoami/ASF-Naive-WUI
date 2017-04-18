@@ -1,0 +1,26 @@
+$def with (asf_bots, errorName=None, errorInfo=None)
+<html>
+<head>
+    <title>ASF-Naive-WUI</title>
+</head>
+<body>
+    <h1>ASF-Naive-WUI</h1>
+    <h2>Bots list</h2>
+$if errorName:
+    <h3>$errorName</h3>
+    <p>$errorInfo</p>
+$for bot_name, bot in asf_bots.iteritems():
+    $if bot['CardFarmer']['Paused']:
+        <h3>$bot_name - Paused - $bot['CardFarmer']['TimeRemaining']</h3>
+    else:
+        <h3>$bot_name - Running - $bot['CardFarmer']['TimeRemaining']</h3>
+    <h4>Currently farming:</h4><p>
+    $for game in bot['CardFarmer']['CurrentGamesFarming']:
+        <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
+    </p>
+    <h4>Games to farm:</h4><p>
+    $for game in bot['CardFarmer']['CurrentGamesFarming']:
+        <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
+    </p>
+</body>
+</html>
