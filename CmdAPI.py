@@ -21,7 +21,7 @@ class ASFAPIError(Exception):
 def cmd(command):
     """Command wrap and send"""
     global CMDHEAD
-    real_cmd = CMDHEAD
+    real_cmd = list(CMDHEAD)
     real_cmd.append(command)
     rawout = None
     try:
