@@ -10,26 +10,26 @@ $if errorName:
     <h3>$errorName</h3>
     <p>$errorInfo</p>
 $for bot_name, bot in asf_bots.iteritems():
-    $if bot['CardFarmer']['Paused']:
-        <h3>$bot_name - Paused - $bot['CardFarmer']['TimeRemaining']</h3>
+    $if bot['CardsFarmer']['Paused']:
+        <h3>$bot_name - Paused - $bot['CardsFarmer']['TimeRemaining']</h3>
         <form method="post">
         <input type="hidden" name="op" value="resume">
         <input type="hidden" name="bot" value="$bot_name">
         <input type="submit" value="Resume">
         </form>
-    else:
-        <h3>$bot_name - Running - $bot['CardFarmer']['TimeRemaining']</h3>
+    $else:
+        <h3>$bot_name - Running - $bot['CardsFarmer']['TimeRemaining']</h3>
         <form method="post">
         <input type="hidden" name="op" value="pause">
         <input type="hidden" name="bot" value="$bot_name">
         <input type="submit" value="Pause">
         </form>
     <h4>Currently farming:</h4><p>
-    $for game in bot['CardFarmer']['CurrentGamesFarming']:
+    $for game in bot['CardsFarmer']['CurrentGamesFarming']:
         <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
     </p>
     <h4>Games to farm:</h4><p>
-    $for game in bot['CardFarmer']['CurrentGamesFarming']:
+    $for game in bot['CardsFarmer']['CurrentGamesFarming']:
         <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
     </p>
 </body>
