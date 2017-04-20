@@ -11,29 +11,26 @@ urls = (
 app_root = os.path.dirname(__file__)
 templates_root = os.path.join(app_root, 'templates')
 render = web.template.render(templates_root)
+web.config.debug=False
 
 class Index:
     def __init__(self):
         pass
 
-    def generateWebpage(self):
-        try:
-            CmdAPI.refreshInfo()
-            return render.index(CmdAPI.asf_status['Bots'])
-        except CmdAPI.ASFAPIError e:
-            return render.index({}, errorName=e.kind, errorInfo=e.detail)
+    def GET(self):
+        return self.POST()
 
     def POST(self):
         i = web.input(op=None, bot=None)
         try:
-            if op and bot:
-                if op == 'pause':
-                    CmdAPI.resumeBot(bot)
-                elif op == 'start':
-                    CmdAPI.pauseBot(bot)
-            CmdAPI.refreshInfo()
-            return render.index(CmdAPI.asf_status['Bots'])
-        except CmdAPI.ASFAPIError e:
+            if i.op and i.bot:
+                if i.op == 'pause':
+                    CmdAPI.resumeBot(i.bot)
+                elif i.op == 'start':
+                    CmdAPI.pauseBot(i.bot)
+            asf_status = CmdAPI.refreshInfo()
+            return render.index(asf_status['Bots'])
+        except CmdAPI.ASFAPIError as e:
             return render.index({}, errorName=e.kind, errorInfo=e.detail)
 
 if __name__ == "__main__":
