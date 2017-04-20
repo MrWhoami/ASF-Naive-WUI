@@ -21,12 +21,10 @@ def cmd(command):
     """Command wrap and send"""
     global CMDHEAD
     real_cmd = CMDHEAD
+    real_cmd.append(command)
     rawout = None
     try:
-    	# rawout = subp.check_output(real_cmd)
-        p = subp.Popen(real_cmd, stderr=subp.PIPE, stdout=subp.PIPE)
-        p.wait()
-        rawout = p.communicate()[0]
+        rawout = subp.check_output(real_cmd)
         if "ERROR" in rawout:
             raise ASFAPIError("ASF Error", detail=rawout)
     except subp.CalledProcessError:
@@ -37,11 +35,18 @@ def refreshInfo():
     """Call api command of the ASF"""
     global respTime, asf_status
     rawout = cmd('api')
-#    print rawout
     wcf_resp = rawout.splitlines()[-1]
-    respTime = wcf_resp.split('|')[0]
-    raw_json = wcf_resp.split('|')[4].split(':')[1]
+    resp_time = wcf_resp.split('|')[0]
+    try:
+        start_pos = wcf_resp.index('{')
+    except ValueError:
+        print wcf_resp
+	raise
+    raw_json = wcf_resp[start_pos:]
     asf_status = json.loads(raw_json)
+    if type(asf_status) != type(dict()):
+        print rawout
+        raise TypeError("Need dict for parse result, but get {}".format(str(type(asf_status))))
     return asf_status
 
 def pauseBot(bot_name):
