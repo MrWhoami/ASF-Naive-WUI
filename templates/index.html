@@ -13,14 +13,9 @@ $if errorName:
 $for bot_name in bots:
     <b>$bot_name</b>
     <form method="post">
-    <input type="hidden" name="op" value="start">
     <input type="hidden" name="bot" value="$bot_name">
-    <input type="submit" value="Start">
-    </form>
-    <form method="post">
-    <input type="hidden" name="op" value="stop">
-    <input type="hidden" name="bot" value="$bot_name">
-    <input type="submit" value="Stop">
+    <input type="submit" name="op" value="start">
+    <input type="submit" name="op" value="stop">
     </form>
     <br>
 $for bot_name, bot in asf_bots.iteritems():
