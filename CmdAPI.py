@@ -7,6 +7,7 @@ import glob
 
 # Some global variables
 CMDHEAD = []
+users = dict()
 
 # Some classes
 class ASFAPIError(Exception):
@@ -57,21 +58,25 @@ def startBot(bot_name):
     rawout = cmd('start {0}'.format(bot_name))
 
 def getBots():
-    rawbots = glob.glob(os.path.join(os.path.dirname(__file__), '..', 'config', '*.json'))
-    bots = []
-    for v in rawbots:
-        name = os.path.basename(v)
-        if name != 'ASF.json':
-            bots.append(name[:-5])
-    return bots
+    return users.keys
 
 # Init some variables when being imported
+# Set command head according to system.
 if os.name == 'nt':
     CMDHEAD = ['..\\ASF.exe', '--client']
 elif os.name == 'posix':
     CMDHEAD = ['mono', '../ASF.exe', '--client']
 else:
     raise ASFAPIError('Unknown system', detail=os.name)
+
+# Get users and passwords
+rawbots = glob.glob(os.path.join(os.path.dirname(__file__), '..', 'config', '*.json'))
+for v in rawbots:
+    name = os.path.basename(v)[:-5]
+    if name != 'ASF':
+        with open(v, 'r') as f:
+            j = json.load(f)
+            user[name] = j["SteamPassword"]
 
 if __name__ == "__main__":
         print getBots()
