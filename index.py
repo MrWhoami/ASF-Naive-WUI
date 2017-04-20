@@ -24,14 +24,15 @@ class Index:
         i = web.input(op=None, bot=None)
         try:
             if i.op and i.bot:
-                if i.op == 'pause':
-                    CmdAPI.resumeBot(i.bot)
+                if i.op == 'stop':
+                    CmdAPI.stopBot(i.bot)
                 elif i.op == 'start':
-                    CmdAPI.pauseBot(i.bot)
+                    CmdAPI.startBot(i.bot)
             asf_status = CmdAPI.refreshInfo()
-            return render.index(asf_status['Bots'])
+            bots = CmdAPI.getBots()
+            return render.index(bots, asf_status['Bots'])
         except CmdAPI.ASFAPIError as e:
-            return render.index({}, errorName=e.kind, errorInfo=e.detail)
+            return render.index(bots, {}, errorName=e.kind, errorInfo=e.detail)
 
 if __name__ == "__main__":
     app = web.application(urls, globals())

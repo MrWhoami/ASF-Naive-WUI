@@ -1,4 +1,4 @@
-$def with (asf_bots, errorName=None, errorInfo=None)
+$def with (bots, asf_bots, errorName=None, errorInfo=None)
 <html>
 <head>
     <title>ASF-Naive-WUI</title>
@@ -9,21 +9,25 @@ $def with (asf_bots, errorName=None, errorInfo=None)
 $if errorName:
     <h3>$errorName</h3>
     <p>$errorInfo</p>
+<h3>Control Center</h3>
+$for bot_name in bots:
+    <b>$bot_name</b>
+    <form method="post">
+    <input type="hidden" name="op" value="start">
+    <input type="hidden" name="bot" value="$bot_name">
+    <input type="submit" value="Start">
+    </form>
+    <form method="post">
+    <input type="hidden" name="op" value="stop">
+    <input type="hidden" name="bot" value="$bot_name">
+    <input type="submit" value="Stop">
+    </form>
+    <br>
 $for bot_name, bot in asf_bots.iteritems():
-    $if bot['CardsFarmer']['Paused']:
-        <h3>$bot_name - Paused - $bot['CardsFarmer']['TimeRemaining']</h3>
-        <form method="post">
-        <input type="hidden" name="op" value="resume">
-        <input type="hidden" name="bot" value="$bot_name">
-        <input type="submit" value="Resume">
-        </form>
-    $else:
+    $if bot['KeepRunning']:
         <h3>$bot_name - Running - $bot['CardsFarmer']['TimeRemaining']</h3>
-        <form method="post">
-        <input type="hidden" name="op" value="pause">
-        <input type="hidden" name="bot" value="$bot_name">
-        <input type="submit" value="Pause">
-        </form>
+    $else:
+        <h3>$bot_name - Stopped - $bot['CardsFarmer']['TimeRemaining']</h3>
     <h4>Currently farming:</h4><p>
     $for game in bot['CardsFarmer']['CurrentGamesFarming']:
         <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />

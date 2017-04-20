@@ -3,6 +3,7 @@
 import subprocess as subp
 import json
 import os
+import glob
 
 # Some global variables
 CMDHEAD = []
@@ -49,11 +50,20 @@ def refreshInfo():
         raise TypeError("Need dict for parse result, but get {}".format(str(type(asf_status))))
     return asf_status
 
-def pauseBot(bot_name):
-    rawout = cmd('pause {0}'.format(bot_name))
+def stopBot(bot_name):
+    rawout = cmd('stop {0}'.format(bot_name))
 
-def resumeBot(bot_name):
-    rawout = cmd('resume {0}'.format(bot_name))
+def startBot(bot_name):
+    rawout = cmd('start {0}'.format(bot_name))
+
+def getBots():
+    rawbots = glob.glob(os.path.join(os.path.dirname(__file__), '..', 'config', '*.json'))
+    bots = []
+    for v in rawbots:
+        name = os.path.basename(v)
+        if name != 'ASF.json':
+            bots.append(name[:-5])
+    return bots
 
 # Init some variables when being imported
 if os.name == 'nt':
@@ -64,5 +74,6 @@ else:
     raise ASFAPIError('Unknown system', detail=os.name)
 
 if __name__ == "__main__":
-	asf_status = refreshInfo()
-	print asf_status
+        print getBots()
+	#asf_status = refreshInfo()
+	#print asf_status
