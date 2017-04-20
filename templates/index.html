@@ -28,7 +28,7 @@ $for bot_name, bot in asf_bots.iteritems():
         <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
     </p>
     <h4>Games to farm:</h4><p>
-    $for game in bot['CardsFarmer']['CurrentGamesFarming']:
+    $for game in bot['CardsFarmer']['GamesToFarm']:
         <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
     </p>
 </body>
