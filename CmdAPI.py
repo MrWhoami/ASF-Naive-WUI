@@ -76,9 +76,10 @@ for v in rawbots:
     if name != 'ASF':
         with open(v, 'r') as f:
             j = json.load(f)
-            user[name] = j["SteamPassword"]
+            users[name] = j["SteamPassword"]
 
 if __name__ == "__main__":
         print getBots()
+        print users
 	#asf_status = refreshInfo()
 	#print asf_status
