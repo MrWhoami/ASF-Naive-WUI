@@ -6,6 +6,7 @@ import os
 import glob
 
 # Some global variables
+ASF_HOME='/home/whoami/ASF/'
 CMDHEAD = []
 users = dict()
 
@@ -63,14 +64,14 @@ def getBots():
 # Init some variables when being imported
 # Set command head according to system.
 if os.name == 'nt':
-    CMDHEAD = ['..\\ASF.exe', '--client']
+    CMDHEAD = [ASF_HOME + '\\ASF.exe', '--client']
 elif os.name == 'posix':
-    CMDHEAD = ['mono', '../ASF.exe', '--client']
+    CMDHEAD = ['mono', ASF_HOME + '/ASF.exe', '--client']
 else:
     raise ASFAPIError('Unknown system', detail=os.name)
 
 # Get users and passwords
-rawbots = glob.glob(os.path.join(os.path.dirname(__file__), '..', 'config', '*.json'))
+rawbots = glob.glob(os.path.join(ASF_HOME, 'config', '*.json'))
 for v in rawbots:
     name = os.path.basename(v)[:-5]
     if name != 'ASF':
