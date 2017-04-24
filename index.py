@@ -17,6 +17,16 @@ render = web.template.render(templates_root)
 web.config.debug=False
 application = web.application(urls, globals()).wsgifunc()
 
+def checkAuth(auth):
+    if auth is None:
+        return False
+    auth = re.sub('^Basic', '', auth)
+    username, password = base64.decodestring(auth).split(':')
+    if username in CmdAPI.users and CmdAPI.users[username] == password:
+        return True
+    else:
+        return False
+
 class Index:
     def __init__(self):
         pass
@@ -25,7 +35,8 @@ class Index:
         return self.POST()
 
     def POST(self):
-        if web.ctx.env.get('HTTP_AUTHORIZATION') is None:
+        auth = web.ctx.env.get('HTTP_AUTHORIZATION')
+        if not checkAuth(auth):
             raise web.seeother('/login')
         i = web.input(op=None, bot=None)
         try:
@@ -47,9 +58,7 @@ class Login:
         if auth is None:
             authreq = True
         else:
-            auth = re.sub('^Basic', '', auth)
-            username, password = base64.decodestring(auth).split(':')
-            if username in CmdAPI.users and CmdAPI.users[username] == password:
+            if checkAuth(auth):
                 raise web.seeother('/')
             else:
                 return render.login('Login failed.')
