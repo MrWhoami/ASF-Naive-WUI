@@ -58,7 +58,7 @@ def startBot(bot_name):
     rawout = cmd('start {0}'.format(bot_name))
 
 def getBots():
-    return users.keys
+    return users.keys()
 
 # Init some variables when being imported
 # Set command head according to system.
@@ -76,7 +76,7 @@ for v in rawbots:
     if name != 'ASF':
         with open(v, 'r') as f:
             j = json.load(f)
-            users[name] = j["SteamPassword"]
+            users[name] = j["WUIPassword"]
 
 if __name__ == "__main__":
         print getBots()
