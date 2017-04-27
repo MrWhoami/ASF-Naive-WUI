@@ -61,9 +61,11 @@ class Admin:
                     CmdAPI.stopBot(i.bot)
                 elif i.op == 'start':
                     CmdAPI.startBot(i.bot)
-            asf_status = CmdAPI.refreshInfo()
             bots = CmdAPI.getBots()
-            return render.admin(bots, asf_status['Bots'])
+            asf_status = dict()
+            for bot in bots:
+                asf_status[bot] = CmdAPI.refreshInfo(bot)['Bots'][bot]
+            return render.admin(bots, asf_status)
         except CmdAPI.ASFAPIError as e:
             return render.admin(bots, {}, errorName=e.kind, errorInfo=e.detail)
 
