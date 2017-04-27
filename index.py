@@ -8,29 +8,42 @@ import CmdAPI
 
 urls = (
     '/', 'Index',
-    '/login', 'Login'
+    '/admin', 'Admin',
+    '/login', 'Login',
+    '/user', 'User'
 )
 
 app_root = os.path.dirname(__file__)
 templates_root = os.path.join(app_root, 'templates')
 render = web.template.render(templates_root)
 web.config.debug=False
-application = web.application(urls, globals()).wsgifunc()
+application = web.application(urls, globals())
 
 def checkAuth(auth):
     if auth is None:
         return False
-    auth = re.sub('^Basic', '', auth)
-    username, password = base64.decodestring(auth).split(':')
+    auth_sub = re.sub('^Basic', '', auth)
+    username, password = base64.decodestring(auth_sub).split(':')
     if username in CmdAPI.users and CmdAPI.users[username] == password:
         return True
     else:
         return False
 
-class Index:
-    def __init__(self):
-        pass
+def currentUser(auth):
+    if auth is None:
+        return None
+    auth_sub = re.sub('^Basic', '', auth)
+    return base64.decodestring(auth_sub).split(':')[0]
 
+class Index:
+    def GET(self):
+        auth = web.ctx.env.get('HTTP_AUTHORIZATION')
+        if not checkAuth(auth):
+            raise web.seeother('/login')
+        else:
+            raise web.seeother('/user')
+
+class Admin:
     def GET(self):
         return self.POST()
 
@@ -38,7 +51,10 @@ class Index:
         auth = web.ctx.env.get('HTTP_AUTHORIZATION')
         if not checkAuth(auth):
             raise web.seeother('/login')
-        i = web.input(op=None, bot=None)
+        user = currentUser(auth)
+        if user != CmdAPI.ADMIN:
+            raise web.seeother('/user')
+        i = web.input(op=None)
         try:
             if i.op and i.bot:
                 if i.op == 'stop':
@@ -47,9 +63,34 @@ class Index:
                     CmdAPI.startBot(i.bot)
             asf_status = CmdAPI.refreshInfo()
             bots = CmdAPI.getBots()
-            return render.index(bots, asf_status['Bots'])
+            return render.admin(bots, asf_status['Bots'])
         except CmdAPI.ASFAPIError as e:
-            return render.index(bots, {}, errorName=e.kind, errorInfo=e.detail)
+            return render.admin(bots, {}, errorName=e.kind, errorInfo=e.detail)
+
+
+class User:
+    def GET(self):
+        return self.POST()
+
+    def POST(self):
+        auth = web.ctx.env.get('HTTP_AUTHORIZATION')
+        if not checkAuth(auth):
+            raise web.seeother('/login')
+        i = web.input(op=None)
+        try:
+            user = currentUser(auth)
+            if i.op:
+                if i.op == 'stop':
+                    CmdAPI.stopBot(user)
+                elif i.op == 'start':
+                    CmdAPI.startBot(user)
+            asf_status = CmdAPI.refreshInfo()
+            if user in asf_status['Bots']:
+                return render.user(user, asf_status['Bots'][user], type)
+            else:
+                return render.user(user, None, type)
+        except CmdAPI.ASFAPIError as e:
+            return render.user(user, e.kind, type)
 
 class Login:
     def GET(self):
@@ -61,7 +102,6 @@ class Login:
             if checkAuth(auth):
                 raise web.seeother('/')
             else:
-                return render.login('Login failed.')
                 authreq = True
         if authreq:
             web.header('WWW-Authenticate','Basic realm="Login ASF-Naive-WUI"')

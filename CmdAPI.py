@@ -9,6 +9,7 @@ import glob
 anw_conf_f = open('config.json', 'r')
 anw_conf = json.load(anw_conf_f)
 ASF_HOME = anw_conf['asf_home']
+ADMIN = anw_conf['admin']
 CMDHEAD = []
 users = dict()
 

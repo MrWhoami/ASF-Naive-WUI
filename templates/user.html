@@ -1,0 +1,33 @@
+$def with (botname, botinfo, type)
+<html>
+<head>
+    <title>ANW - $botname</title>
+</head>
+<body>
+    <h1>Welcome $botname</h1>
+$if botinfo is None:
+    <h2>Status: No cards remain</h2>
+$elif type(botinfo) != type(dict()):
+    <h2>Status: $botinfo</h2>
+$else:
+    $if botinfo['KeepRunning']:
+        <h2>Status: Running</h2>
+        <form method="post">
+        <input type="submit" name="op" value="stop">
+        </form>
+    $else:
+        <h2>Status: Stopped</h2>
+        <form method="post">
+        <input type="submit" name="op" value="start">
+        </form>
+    <p><b>Time remaining: $botinfo['CardsFarmer']['TimeRemaining']</b></p>
+    <h2>Currently farming:</h2><p>
+    $for game in botinfo['CardsFarmer']['CurrentGamesFarming']:
+        <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
+    </p>
+    <h2>Games to farm:</h2><p>
+    $for game in botinfo['CardsFarmer']['GamesToFarm']:
+        <b>$game['GameName']</b> $game['CardsRemaining'] cards remain<br />
+    </p>
+</body>
+</html>
