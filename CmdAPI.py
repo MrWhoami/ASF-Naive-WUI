@@ -37,10 +37,13 @@ def cmd(command):
         raise ASFAPIError("Command Error", detail=rawout)
     return rawout
 
-def refreshInfo():
+def refreshInfo(user=None):
     """Call api command of the ASF"""
     global respTime, asf_status
-    rawout = cmd('api')
+    if user:
+        rawout = cmd('api ' + user)
+    else
+        rawout = cmd('api')
     wcf_resp = rawout.splitlines()[-1]
     resp_time = wcf_resp.split('|')[0]
     try:

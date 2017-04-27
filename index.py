@@ -84,7 +84,7 @@ class User:
                     CmdAPI.stopBot(user)
                 elif i.op == 'start':
                     CmdAPI.startBot(user)
-            asf_status = CmdAPI.refreshInfo()
+            asf_status = CmdAPI.refreshInfo(user)
             if user in asf_status['Bots']:
                 return render.user(user, asf_status['Bots'][user], type)
             else:
