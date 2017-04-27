@@ -42,7 +42,7 @@ def refreshInfo(user=None):
     global respTime, asf_status
     if user:
         rawout = cmd('api ' + user)
-    else
+    else:
         rawout = cmd('api')
     wcf_resp = rawout.splitlines()[-1]
     resp_time = wcf_resp.split('|')[0]
