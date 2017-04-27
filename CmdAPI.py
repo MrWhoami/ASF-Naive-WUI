@@ -7,8 +7,8 @@ import glob
 
 # Some global variables
 anw_conf_f = open('config.json', 'r')
-anf_conf = json.load(asf_conf_f)
-ASF_HOME = asf_conf['asf_home']
+anw_conf = json.load(anw_conf_f)
+ASF_HOME = anw_conf['asf_home']
 CMDHEAD = []
 users = dict()
 
