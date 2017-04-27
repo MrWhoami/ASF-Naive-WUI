@@ -6,7 +6,9 @@ import os
 import glob
 
 # Some global variables
-ASF_HOME='/home/whoami/ASF/'
+anw_conf_f = open('config.json', 'r')
+anf_conf = json.load(asf_conf_f)
+ASF_HOME = asf_conf['asf_home']
 CMDHEAD = []
 users = dict()
 

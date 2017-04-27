@@ -1,0 +1,8 @@
+{
+	"Enabled": false,
+	"SteamLogin": "SteamUsername",
+	"SteamPassword": "SteamPassword",
+	"FarmOffline": true,
+	"FarmingOrder": 3,
+	"WUIPassword": "WebUIPassword"
+}
