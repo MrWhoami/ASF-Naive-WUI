@@ -1,13 +1,29 @@
-# ASF Naive Web UI
+# ANW
+## Description
+ANW is an [Archi Steam Farm](https://github.com/JustArchi/ArchiSteamFarm) Naive Web UI.
 
-### 如何使用
-1. 需要安装 Python 2 以及 web.py 库；
-2. Linux 需要安装 mono；
-3. 自己去看 [ASF 的文档](https://github.com/JustArchi/ArchiSteamFarm)，把 ASF 装好，自己跑一下试试，看看能不能跑起来，需不需要额外的密令啥的；
-4. 确定能跑起来，关了；
-5. [找到自己的 steamID](https://steamcommunity.com/sharedfiles/filedetails/?id=209000244)，只要第二个冒号后的数字部分；
-6. 修改 `ASF.json`，把 `Headless` 改成 `true`，把 `SteamOwnerID` 后面的 0 改成刚才找到的自己的 Steam ID；
-7. 到 ASF.exe 所在目录下，，执行 `git clone https://github.com/MrWhoami/ASF-Naive-WUI.git`；
-8. Linux 执行 `mono ASF.exe --server`，Windows 执行 `ASF.exe --server`
-8. 执行 `python ASF-Naive-WUI/index.py 9563`；
-9. 访问你的服务器的 IP 的 9563 端口即可。
+## Features
+* Can run with python itself or wsgi.
+* Can run on Windows or Linux.
+* Manage multi users through Web UI.
+* Display current farming, games to farm and time remaining.
+* Start and stop bots.
+* Login by 2FA code or email code through Web UI. (Experimental)
+
+## Dependencies
+* ASF
+* Python 2.7
+* web.py
+* mono (Linux and macOS)
+
+## How to Use
+### Python server
+1. Check dependencies.
+2. Modify `config.json`.
+3. Create your own configuration by copy `static/template.json` into `username.json`, in which `username` is user defined.
+4. Modify `username.json`. You may need to fill in `SteamLogin`, `SteamPassword` and `WUIPassword`.
+5. Move `username.json` under the `config` folder of ASF.
+6. Configurate the ASF according to its wiki.
+7. Start ASF.
+8. `python index.py`
+9. You can login your website:8080 with `username` and `WUIPassword`.
