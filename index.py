@@ -39,9 +39,9 @@ class Index:
     def GET(self):
         auth = web.ctx.env.get('HTTP_AUTHORIZATION')
         if not checkAuth(auth):
-            raise web.seeother('/login')
+            return render.index(None)
         else:
-            raise web.seeother('/user')
+            return render.index(currentUser(auth))
 
 class Admin:
     def GET(self):

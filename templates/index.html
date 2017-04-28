@@ -1,0 +1,27 @@
+$def with (username)
+
+<html>
+<head>
+<title>Welcome to ANW</title>
+<script type="text/javascript">
+setInterval(function(){
+    var now = document.getElementById("cd").innerHTML;
+    if (now != 0) {
+        now--;
+        document.getElementById("cd").innerHTML = now;
+    }
+}, 1000);
+</script>
+$if username:
+    <meta http-equiv=refresh content="5;url=/user">
+$else:
+    <meta http-equiv=refresh content="5;url=/login">
+</head>
+<body>
+$if username:
+    <h1>Welcome back, $username</h1>
+$else:
+    <h1>Welcome to ANW</h1>
+<i>Jump in <b id="cd">5</b>s</i>
+</body>
+</html>
